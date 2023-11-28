@@ -9,12 +9,14 @@ import { login, getUserInfo, register } from '@/services/userService'
 import { User } from '@/interfaces/User.interface'
 import { UserCredentials } from '@/interfaces/UserCredentials.inteface'
 import { RegisterUser } from '@/interfaces/RegisterUser'
+import { useRouter } from 'next/navigation'
 
 type AuthContextType = {
   isAuthenticated: boolean
   user: User | null
   signIn: ({ email, password }: UserCredentials) => void
   signUp: ({ name, email, password }: RegisterUser) => Promise<void>
+  signOut: () => void
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -23,6 +25,7 @@ const { Provider } = AuthContext
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const router = useRouter()
 
   const isAuthenticated = !!user
 
@@ -83,8 +86,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser({ name, email })
   }
 
+  async function signOut() {
+    try {
+      setCookie(undefined, 'nextAuth-Token', '', {
+        maxAge: -1,
+      })
+
+      delete api.defaults.headers.Authorization
+
+      router.push('/')
+    } catch (error) {
+      console.error('Error during sign out:', error)
+    }
+  }
+
   return (
-    <Provider value={{ isAuthenticated, user, signIn, signUp }}>
+    <Provider value={{ isAuthenticated, user, signIn, signUp, signOut }}>
       {children}
     </Provider>
   )

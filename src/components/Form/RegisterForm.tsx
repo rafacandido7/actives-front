@@ -128,7 +128,7 @@ export function RegisterForm() {
             <Stack my={5}>
               <Text align="end">
                 Já possui uma conta?{' '}
-                <Link href="/login" color={'blue.400'}>
+                <Link href="/" color={'blue.400'}>
                   Faça login
                 </Link>
               </Text>

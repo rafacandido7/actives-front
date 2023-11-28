@@ -1,6 +1,5 @@
 'use client'
 
-import { AuthContext } from '@/context/AuthContext'
 import {
   Avatar,
   Box,
@@ -19,12 +18,18 @@ import {
 import { useContext } from 'react'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
 
+import { AuthContext } from '@/context/AuthContext'
+
 interface NavProps extends FlexProps {
   onOpen: () => void
 }
 
 export function Navbar({ onOpen, ...rest }: NavProps) {
-  const { user } = useContext(AuthContext)
+  const { user, signOut } = useContext(AuthContext)
+
+  const handleLogout = () => {
+    signOut()
+  }
 
   return (
     <Flex
@@ -82,7 +87,7 @@ export function Navbar({ onOpen, ...rest }: NavProps) {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <MenuItem>Sair</MenuItem>
+              <MenuItem onClick={handleLogout}>Sair</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
