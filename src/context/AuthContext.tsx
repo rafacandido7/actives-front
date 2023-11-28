@@ -1,15 +1,15 @@
 'use client'
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { setCookie, parseCookies } from 'nookies'
 
 import { api } from '@/services/api'
 import { login, getUserInfo, register } from '@/services/userService'
 
-import { User } from '@/interfaces/User.interface'
-import { UserCredentials } from '@/interfaces/UserCredentials.inteface'
-import { RegisterUser } from '@/interfaces/RegisterUser'
-import { useRouter } from 'next/navigation'
+import { User } from '@/interfaces/User/user.interface'
+import { UserCredentials } from '@/interfaces/User/credentials.user.interface'
+import { RegisterUser } from '@/interfaces/User/register.user.interface'
 
 type AuthContextType = {
   isAuthenticated: boolean
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await getUserInfo()
     }
 
-    const { 'nextAuth-token': token } = parseCookies()
+    const { 'nextAuth-Token': token } = parseCookies()
 
     const fetchUserInformation = async () => {
       if (token) {
@@ -93,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       delete api.defaults.headers.Authorization
+
+      setUser(null)
 
       router.push('/')
     } catch (error) {
