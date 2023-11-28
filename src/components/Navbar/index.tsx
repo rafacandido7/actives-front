@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthContext } from '@/context/AuthContext'
 import {
   Avatar,
   Box,
@@ -15,6 +16,7 @@ import {
   VStack,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { useContext } from 'react'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
 
 interface NavProps extends FlexProps {
@@ -22,6 +24,8 @@ interface NavProps extends FlexProps {
 }
 
 export function Navbar({ onOpen, ...rest }: NavProps) {
+  const { user } = useContext(AuthContext)
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -60,16 +64,14 @@ export function Navbar({ onOpen, ...rest }: NavProps) {
               _focus={{ boxShadow: 'none' }}
             >
               <HStack>
-                {/* <Avatar size={'sm'} name="User Name" /> */}
-                <Avatar size={'sm'} name="User Name" bg="primary.100" />
+                <Avatar size={'sm'} name={user?.name} bg="primary.100" />
                 <VStack
                   display={{ base: 'none', md: 'flex' }}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2"
                 >
-                  {/* <Text fontSize="sm">user.name</Text> */}
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">{user?.name}</Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <FiChevronDown />

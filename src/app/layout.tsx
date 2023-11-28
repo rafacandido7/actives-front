@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { ChakraProviders } from '@/providers/chakra.provider'
 
 import '../styles/globals.css'
+import { AuthProvider } from '@/context/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ChakraProviders>{children}</ChakraProviders>
+        <AuthProvider>
+          <ChakraProviders>{children}</ChakraProviders>
+        </AuthProvider>
       </body>
     </html>
   )

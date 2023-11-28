@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   Button,
   Flex,
@@ -12,16 +12,19 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Link } from '@chakra-ui/next-js'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import LoginImage from '../../../public/assets/log.svg'
 import Logo from '../../../public/assets/logo.svg'
+import { AuthContext } from '@/context/AuthContext'
 
 const schema = z.object({
   email: z.string().email({ message: 'Digite um e-mail válido' }),
@@ -30,27 +33,46 @@ const schema = z.object({
     .min(8, { message: 'A senha deve ter no mínimo 8 caracteres' }),
 })
 
+type LoginFormValues = z.infer<typeof schema>
+
 export function LoginForm() {
-  const [isSubmitting, setSubmitting] = useState(false)
+  const [isLoading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
   })
+  const toast = useToast()
+  const { signIn } = useContext(AuthContext)
+  const router = useRouter()
 
-  const onSubmit = () => {
-    onClick()
-  }
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      setLoading(true)
+      await signIn(values)
 
-  const onClick = () => {
-    setSubmitting(true)
+      toast({
+        title: 'Usuário logado com sucesso!',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
 
-    setTimeout(() => {
-      setSubmitting(false)
-    }, 2000)
+      router.push('/dashboard')
+    } catch (error) {
+      toast({
+        title: 'Erro de login',
+        description: 'Verifique suas credenciais e tente novamente.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -99,7 +121,7 @@ export function LoginForm() {
               <Button
                 colorScheme="primary"
                 variant="solid"
-                isLoading={isSubmitting}
+                isLoading={isLoading}
                 type="submit"
               >
                 Entrar
