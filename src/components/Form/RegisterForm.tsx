@@ -24,7 +24,7 @@ import { z } from 'zod'
 import RegisterImage from '../../../public/assets/login.svg'
 import Logo from '../../../public/assets/logo.svg'
 import { useRouter } from 'next/navigation'
-import { AuthContext } from '@/context/AuthContext'
+import { AuthContext } from '@/contexts/AuthContext'
 
 const schema = z.object({
   name: z.string({ required_error: 'Nome é obrigatório!' }),

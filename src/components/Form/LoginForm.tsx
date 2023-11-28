@@ -24,7 +24,7 @@ import { z } from 'zod'
 
 import LoginImage from '../../../public/assets/log.svg'
 import Logo from '../../../public/assets/logo.svg'
-import { AuthContext } from '@/context/AuthContext'
+import { AuthContext } from '@/contexts/AuthContext'
 
 const schema = z.object({
   email: z.string().email({ message: 'Digite um e-mail válido' }),

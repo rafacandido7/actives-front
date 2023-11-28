@@ -2,9 +2,9 @@ import { AxiosResponse } from 'axios'
 
 import { api } from '@/services/api'
 
-import { UserCredentials } from '@/interfaces/UserCredentials.inteface'
-import { RegisterUser } from '@/interfaces/RegisterUser'
-import { User } from '@/interfaces/User.interface'
+import { UserCredentials } from '@/interfaces/User/credentials.user.interface'
+import { RegisterUser } from '@/interfaces/User/register.user.interface'
+import { User } from '@/interfaces/User/user.interface'
 
 export async function login({ email, password }: UserCredentials) {
   try {

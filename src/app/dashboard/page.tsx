@@ -1,12 +1,7 @@
 import React from 'react'
 
-import { Sidebar } from '@/components/Sidebar'
-import Card from '@/components/dashboard/Card'
+import Card from '@/components/Dashboard/Card'
 
 export default function Dashboard() {
-  return (
-    <Sidebar>
-      <Card></Card>
-    </Sidebar>
-  )
+  return <Card />
 }

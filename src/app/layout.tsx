@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import { ChakraProviders } from '@/providers/chakra.provider'
 
 import '../styles/globals.css'
-import { AuthProvider } from '@/context/AuthContext'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 

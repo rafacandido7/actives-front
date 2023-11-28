@@ -18,7 +18,7 @@ import {
 import { useContext } from 'react'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
 
-import { AuthContext } from '@/context/AuthContext'
+import { AuthContext } from '@/contexts/AuthContext'
 
 interface NavProps extends FlexProps {
   onOpen: () => void

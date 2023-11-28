@@ -10,7 +10,7 @@ interface LinkItemProps {
 }
 
 export const SidebarLinks: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, path: '/' },
-  { name: 'Ativos', icon: GrAction, path: '/actives' },
-  { name: 'Suporte', icon: BiSupport, path: '/supportCalls' },
+  { name: 'Home', icon: FiHome, path: '/dashboard' },
+  { name: 'Ativos', icon: GrAction, path: '/dashboard/actives' },
+  { name: 'Suporte', icon: BiSupport, path: '/dashboard/supportCalls' },
 ]
