@@ -43,9 +43,7 @@ export async function register({ email, password, name }: RegisterUser) {
 
     const token = response.data.accessToken
 
-    if (token) {
-      api.defaults.headers.Authorization = `Bearer ${token}`
-    }
+    return token
   } catch (error) {
     console.error('Error on signUp:', error)
     throw new Error('Error on signUp')

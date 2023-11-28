@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Button,
   Flex,
@@ -12,6 +12,7 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/next-js'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
@@ -22,46 +23,63 @@ import { z } from 'zod'
 
 import RegisterImage from '../../../public/assets/login.svg'
 import Logo from '../../../public/assets/logo.svg'
+import { useRouter } from 'next/navigation'
+import { AuthContext } from '@/context/AuthContext'
 
 const schema = z.object({
-  name: z
-    .string({ required_error: 'Nome é obrigatório!' })
-    .transform((name) => {
-      return name
-        .trim()
-        .split(' ')
-        .map((word) => {
-          return word[0].toLocaleUpperCase().concat(word.substring(1))
-        })
-        .join(' ')
-    }),
+  name: z.string({ required_error: 'Nome é obrigatório!' }),
   email: z.string().email({ message: 'Digite um e-mail válido' }),
   password: z
     .string()
     .min(8, { message: 'A senha deve ter no mínimo 8 caracteres' }),
 })
 
+type RegisterFormValues = z.infer<typeof schema>
+
 export function RegisterForm() {
+  const { signUp, isAuthenticated } = useContext(AuthContext)
   const [isSubmitting, setSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const toast = useToast()
+  const router = useRouter()
 
-  const onClick = () => {
-    setSubmitting(true)
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      setSubmitting(true)
+      await signUp(values)
 
-    setTimeout(() => {
+      toast({
+        title: 'Usuário cadastrado com sucesso!',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
+
+      router.push('/dashboard')
+    } catch (error) {
+      toast({
+        title: 'Erro no cadastro',
+        description: 'Ocorreu um erro durante o cadastro. Tente novamente.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    } finally {
       setSubmitting(false)
-    }, 2000)
+    }
   }
 
-  const onSubmit = () => {
-    onClick()
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [isAuthenticated, router])
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterFormValues>({
     resolver: zodResolver(schema),
   })
 
