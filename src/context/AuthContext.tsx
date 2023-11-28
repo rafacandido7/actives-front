@@ -2,7 +2,6 @@
 
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { setCookie, parseCookies } from 'nookies'
-import Router from 'next/router'
 
 import { login, getUserInfo } from '@/services/userService'
 

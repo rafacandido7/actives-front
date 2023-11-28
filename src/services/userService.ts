@@ -1,5 +1,3 @@
-import axios, { AxiosResponse } from 'axios'
-
 import { api } from '@/services/api'
 
 import { UserCredentials } from '@/interfaces/UserCredentials.inteface'
