@@ -1,11 +1,12 @@
 import React from 'react'
 
 import { Sidebar } from '@/components/Sidebar'
+import Card from '@/components/dashboard/Card'
 
 export default function Dashboard() {
   return (
     <Sidebar>
-      <h1>oi</h1>
+      <Card></Card>
     </Sidebar>
   )
 }
