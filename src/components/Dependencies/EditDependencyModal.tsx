@@ -33,6 +33,7 @@ interface EditDependencyModalProps {
   dependency: Dependency
   isOpen: boolean
   onClose: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onUpdate: (dependencyId: string, data: any) => Promise<void>
 }
 

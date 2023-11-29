@@ -52,6 +52,7 @@ export function DependenciesByActiveId({
     onOpen()
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdateDependency = async (dependencyId: string, data: any) => {
     const { value, description, name, healthStatus, lifeTime } = data
 
