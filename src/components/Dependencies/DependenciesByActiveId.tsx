@@ -1,3 +1,4 @@
+// DependenciesByActiveId.tsx
 import {
   Box,
   Table,
@@ -8,15 +9,16 @@ import {
   Td,
   Text,
   Button,
+  useDisclosure,
   useToast,
-  HStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Dependency } from '@/interfaces/Dependency/dependency.interface'
 import { useDependencies } from '@/hooks/useDependencies'
+import { EditDependencyModal } from './EditDependencyModal'
 import { translateHealthStatus } from '@/utils/translateHealthStatus'
-import { AddDependencyModal } from './AddDependencyModal'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { deleteDependency } from '@/services/dependenciesService'
 
 interface DependenciesByActiveIdProps {
   activeId: string
@@ -25,8 +27,11 @@ interface DependenciesByActiveIdProps {
 export function DependenciesByActiveId({
   activeId,
 }: DependenciesByActiveIdProps) {
-  const { getDependenciesByActiveId, deleteDependency } = useDependencies()
+  const { getDependenciesByActiveId, updateDependency } = useDependencies()
   const [dependencies, setDependencies] = useState<Dependency[] | null>(null)
+  const [selectedDependency, setSelectedDependency] =
+    useState<Dependency | null>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
   useEffect(() => {
@@ -41,6 +46,24 @@ export function DependenciesByActiveId({
 
     fetchData()
   }, [activeId, getDependenciesByActiveId])
+
+  const handleEditClick = (dependency: Dependency) => {
+    setSelectedDependency(dependency)
+    onOpen()
+  }
+
+  const handleUpdateDependency = async (dependencyId: string, data: any) => {
+    const { value, description, name, healthStatus, lifeTime } = data
+
+    await updateDependency(dependencyId, {
+      value: Number(value),
+      description,
+      name,
+      healthStatus,
+      lifeTime,
+      activeId,
+    })
+  }
 
   const handleDeleteDependency = async (dependencyId: string) => {
     try {
@@ -70,17 +93,14 @@ export function DependenciesByActiveId({
   }
 
   if (!dependencies || dependencies.length === 0) {
-    return <Text mt={4}>O Ativo não tem dependências adicionadas.</Text>
+    return <Text mt={4}>O Ativo não tem dependencias adicionadas.</Text>
   }
 
   return (
     <Box mt={4} bg="white" borderRadius="md" p={4}>
-      <HStack justifyContent="space-between" mb={4}>
-        <Text fontSize="xl" as="b" mb={4}>
-          Dependências do Ativo
-        </Text>
-        <AddDependencyModal activeId={activeId} />
-      </HStack>
+      <Text fontSize="xl" as="b" mb={4}>
+        Dependências do ativo
+      </Text>
       <Table variant="simple" colorScheme="whiteAlpha">
         <Thead>
           <Tr>
@@ -104,9 +124,18 @@ export function DependenciesByActiveId({
               <Td>{formatCurrency(dependency.value)}</Td>
               <Td>
                 <Button
+                  colorScheme="primary"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEditClick(dependency)}
+                >
+                  Editar
+                </Button>
+                <Button
                   colorScheme="red"
                   size="sm"
                   onClick={() => handleDeleteDependency(dependency.id)}
+                  mt={2}
                 >
                   Excluir
                 </Button>
@@ -115,6 +144,18 @@ export function DependenciesByActiveId({
           ))}
         </Tbody>
       </Table>
+
+      {selectedDependency && (
+        <EditDependencyModal
+          dependency={selectedDependency}
+          isOpen={isOpen}
+          onClose={() => {
+            setSelectedDependency(null)
+            onClose()
+          }}
+          onUpdate={handleUpdateDependency}
+        />
+      )}
     </Box>
   )
 }
