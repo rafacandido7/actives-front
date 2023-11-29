@@ -1,4 +1,3 @@
-// DependenciesByActiveId.tsx
 import {
   Box,
   Table,
@@ -19,6 +18,7 @@ import { EditDependencyModal } from './EditDependencyModal'
 import { translateHealthStatus } from '@/utils/translateHealthStatus'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { deleteDependency } from '@/services/dependenciesService'
+import { AddDependencyModal } from './AddDependencyModal'
 
 interface DependenciesByActiveIdProps {
   activeId: string
@@ -94,7 +94,12 @@ export function DependenciesByActiveId({
   }
 
   if (!dependencies || dependencies.length === 0) {
-    return <Text mt={4}>O Ativo não tem dependencias adicionadas.</Text>
+    return (
+      <>
+        <Text mt={4}>O Ativo não tem dependencias adicionadas.</Text>
+        <AddDependencyModal activeId={activeId} />
+      </>
+    )
   }
 
   return (
@@ -102,6 +107,7 @@ export function DependenciesByActiveId({
       <Text fontSize="xl" as="b" mb={4}>
         Dependências do ativo
       </Text>
+      <AddDependencyModal activeId={activeId} />
       <Table variant="simple" colorScheme="whiteAlpha">
         <Thead>
           <Tr>
@@ -136,7 +142,6 @@ export function DependenciesByActiveId({
                   colorScheme="red"
                   size="sm"
                   onClick={() => handleDeleteDependency(dependency.id)}
-                  mt={2}
                 >
                   Excluir
                 </Button>

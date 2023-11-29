@@ -1,4 +1,3 @@
-// Importe os componentes necessários
 import {
   Box,
   Button,

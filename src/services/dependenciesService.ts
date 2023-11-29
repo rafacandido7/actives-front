@@ -1,5 +1,3 @@
-// dependency.service.ts
-
 import { api } from '@/services/api'
 
 import { Dependency } from '@/interfaces/Dependency/dependency.interface'

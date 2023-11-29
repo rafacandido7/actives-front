@@ -1,7 +1,5 @@
 'use client'
 
-// AddDependencyModal.tsx
-
 import {
   Box,
   Button,
