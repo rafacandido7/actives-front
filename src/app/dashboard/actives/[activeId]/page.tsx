@@ -10,6 +10,7 @@ import {
   FormLabel,
   Button,
   HStack,
+  Select,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { useActives } from '@/hooks/useActives'
@@ -123,6 +124,12 @@ export default function ActiveDetails({ params }: { params: any }) {
     return <Box>Error loading active details.</Box>
   }
 
+  const healthStatusOptions = [
+    { label: 'Saudável', value: 'HEALTY' },
+    { label: 'Atenção', value: 'WARNING' },
+    { label: 'Crítico', value: 'CRITICAL' },
+  ]
+
   return (
     <Box p={4} bg="white" borderRadius="md">
       <Heading as="h1" mb={4}>
@@ -146,12 +153,17 @@ export default function ActiveDetails({ params }: { params: any }) {
 
       <FormControl mb={2}>
         <FormLabel>Health Status</FormLabel>
-        <Input
+        <Select
           value={active.healthStatus}
           isDisabled={!isEditing}
-          placeholder="Health Status"
           onChange={(e) => handleChange('healthStatus', e.target.value)}
-        />
+        >
+          {healthStatusOptions.map((status) => (
+            <option key={status.value} value={status.value}>
+              {status.label}
+            </option>
+          ))}
+        </Select>
       </FormControl>
 
       <FormControl mb={2}>
