@@ -4,6 +4,6 @@ export interface Dependency {
   name: string
   description: string
   healthStatus: string
-  lifeTime: number
+  lifeTime: string
   value: number
 }
