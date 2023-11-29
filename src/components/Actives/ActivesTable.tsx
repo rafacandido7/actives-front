@@ -74,9 +74,6 @@ export function ActivesTable() {
               <Td>{active.lifeTime}</Td>
               <Td>
                 <HStack spacing={2}>
-                  <Button colorScheme="blue" size="sm">
-                    Editar
-                  </Button>
                   <Button
                     colorScheme="red"
                     size="sm"
