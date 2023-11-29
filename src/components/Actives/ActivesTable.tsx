@@ -27,6 +27,19 @@ export function ActivesTable() {
     }
   }, [actives, fetchAllActives])
 
+  const translateHealthStatus = (status: string) => {
+    switch (status) {
+      case 'HEALTY':
+        return 'Saudável'
+      case 'WARNING':
+        return 'Atenção'
+      case 'CRITICAL':
+        return 'Crítico'
+      default:
+        return status
+    }
+  }
+
   const handleDelete = async (id: string) => {
     try {
       await deleteActive(id)
@@ -70,7 +83,7 @@ export function ActivesTable() {
                 </Link>
               </Td>
               <Td>{active.name}</Td>
-              <Td>{active.healthStatus}</Td>
+              <Td>{translateHealthStatus(active.healthStatus)}</Td>
               <Td>{active.lifeTime}</Td>
               <Td>
                 <HStack spacing={2}>
