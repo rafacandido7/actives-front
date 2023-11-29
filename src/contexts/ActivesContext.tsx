@@ -15,7 +15,7 @@ interface ActivesContextData {
   actives: Active[]
   createActive: (activeData: Omit<Active, 'id'>) => Promise<void>
   fetchAllActives: () => Promise<void>
-  fetchActiveById: (id: string) => Promise<void>
+  fetchActiveById: (id: string) => Promise<Active | null>
   updateActive: (id: string, activeData: Partial<Active>) => Promise<void>
   deleteActive: (id: string) => Promise<void>
 }
@@ -55,9 +55,12 @@ export function ActivesProvider({ children }: ActivesProviderProps) {
 
   const fetchActiveById = async (id: string) => {
     try {
-      await getActiveById(id)
+      const active = await getActiveById(id)
+
+      return active || null
     } catch (error) {
       console.error('Error fetching active by ID:', error)
+      return null
     }
   }
 

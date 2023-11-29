@@ -11,28 +11,32 @@ import {
   Button,
   HStack,
   useToast,
-  Spinner,
 } from '@chakra-ui/react'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { getAllActives, deleteActive } from '@/services/activesService'
+import { useEffect } from 'react'
+import { useActives } from '@/hooks/useActives'
 import { AddActiveModal } from './AddActiveModal'
+import { Link } from '@chakra-ui/next-js'
 
 export function ActivesTable() {
-  const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery('actives', getAllActives)
+  const { actives, fetchAllActives, deleteActive } = useActives()
   const toast = useToast()
 
-  const deleteMutation = useMutation(deleteActive, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('actives')
+  useEffect(() => {
+    if (!actives.length) {
+      fetchAllActives()
+    }
+  }, [actives, fetchAllActives])
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteActive(id)
       toast({
         title: 'Ativo excluído com sucesso!',
         status: 'success',
         duration: 2000,
         isClosable: true,
       })
-    },
-    onError: (error) => {
+    } catch (error) {
       toast({
         title: 'Erro ao excluir ativo',
         description: 'Verifique as informações e tente novamente.',
@@ -41,60 +45,51 @@ export function ActivesTable() {
         isClosable: true,
       })
       console.error('Error deleting active:', error)
-    },
-  })
-
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteMutation.mutateAsync(id)
-    } catch (error) {
-      console.error('Error deleting active:', error)
     }
   }
 
   return (
     <Box mt={4} bg="white" borderRadius="md" p={4}>
       <AddActiveModal />
-      {isLoading ? (
-        <Spinner size="xl" />
-      ) : (
-        <Table variant="simple" colorScheme="whiteAlpha">
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Nome</Th>
-              <Th>Saúde</Th>
-              <Th>LifeTime</Th>
-              <Th>Ações</Th>
+      <Table variant="simple" colorScheme="whiteAlpha">
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Nome</Th>
+            <Th>Saúde</Th>
+            <Th>LifeTime</Th>
+            <Th>Ações</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {actives.map((active) => (
+            <Tr key={active.id}>
+              <Td>
+                <Link href={`/dashboard/actives/${active.id}`}>
+                  {active.id}
+                </Link>
+              </Td>
+              <Td>{active.name}</Td>
+              <Td>{active.healthStatus}</Td>
+              <Td>{active.lifeTime}</Td>
+              <Td>
+                <HStack spacing={2}>
+                  <Button colorScheme="blue" size="sm">
+                    Editar
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => handleDelete(active.id)}
+                  >
+                    Excluir
+                  </Button>
+                </HStack>
+              </Td>
             </Tr>
-          </Thead>
-          <Tbody>
-            {data &&
-              data.map((active) => (
-                <Tr key={active.id}>
-                  <Td>{active.id}</Td>
-                  <Td>{active.name}</Td>
-                  <Td>{active.healthStatus}</Td>
-                  <Td>{active.lifeTime}</Td>
-                  <Td>
-                    <HStack spacing={2}>
-                      <Button colorScheme="blue" size="sm">
-                        Editar
-                      </Button>
-                      <Button
-                        colorScheme="red"
-                        size="sm"
-                        onClick={() => handleDelete(active.id)}
-                      >
-                        Excluir
-                      </Button>
-                    </HStack>
-                  </Td>
-                </Tr>
-              ))}
-          </Tbody>
-        </Table>
-      )}
+          ))}
+        </Tbody>
+      </Table>
     </Box>
   )
 }

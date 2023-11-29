@@ -1,12 +1,12 @@
 import { api } from '@/services/api'
 
 import { Active } from '@/interfaces/Active/active.interface'
+import { parseCookies } from 'nookies'
 
-export async function createActive(
-  activeData: Omit<Active, 'id'>,
-): Promise<Active> {
+export async function createActive(activeData: Omit<Active, 'id'>) {
   try {
     const response = await api.post('/actives', activeData)
+
     return response.data
   } catch (error) {
     throw new Error('Error creating active')

@@ -23,7 +23,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
 
 const schema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório' }),
@@ -40,7 +39,6 @@ export function AddActiveModal() {
   const { createActive } = useActives()
   const toast = useToast()
   const router = useRouter()
-  const { refetch } = useQuery('actives')
 
   const {
     register,
@@ -58,8 +56,6 @@ export function AddActiveModal() {
       onClose()
 
       router.push('/dashboard/actives')
-
-      refetch()
 
       toast({
         title: 'Ativo adicionado com sucesso!',
@@ -110,7 +106,7 @@ export function AddActiveModal() {
               <FormControl mb={4}>
                 <FormLabel>Saúde</FormLabel>
                 <Select {...register('healthStatus')}>
-                  <option value="HEALTHY">Saudável</option>
+                  <option value="HEALTY">Saudável</option>
                   <option value="WARNING">Atenção</option>
                   <option value="CRITICAL">Crítico</option>
                 </Select>
