@@ -16,6 +16,7 @@ import { useEffect } from 'react'
 import { useActives } from '@/hooks/useActives'
 import { AddActiveModal } from './AddActiveModal'
 import { Link } from '@chakra-ui/next-js'
+import { translateHealthStatus } from '@/utils/translateHealthStatus'
 
 export function ActivesTable() {
   const { actives, fetchAllActives, deleteActive } = useActives()
@@ -26,19 +27,6 @@ export function ActivesTable() {
       fetchAllActives()
     }
   }, [actives, fetchAllActives])
-
-  const translateHealthStatus = (status: string) => {
-    switch (status) {
-      case 'HEALTY':
-        return 'Saudável'
-      case 'WARNING':
-        return 'Atenção'
-      case 'CRITICAL':
-        return 'Crítico'
-      default:
-        return status
-    }
-  }
 
   const handleDelete = async (id: string) => {
     try {

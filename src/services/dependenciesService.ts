@@ -1,3 +1,5 @@
+// dependency.service.ts
+
 import { api } from '@/services/api'
 
 import { Dependency } from '@/interfaces/Dependency/dependency.interface'
@@ -30,6 +32,17 @@ export async function getDependencyById(
     return response.data
   } catch (error) {
     throw new Error('Error fetching dependency by ID')
+  }
+}
+
+export async function getDependencyByActiveId(
+  activeId: string,
+): Promise<Dependency[]> {
+  try {
+    const response = await api.get(`/dependencies/active/${activeId}`)
+    return response.data
+  } catch (error) {
+    throw new Error('Error fetching dependencies by Active ID')
   }
 }
 

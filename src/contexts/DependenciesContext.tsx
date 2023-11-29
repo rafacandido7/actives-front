@@ -6,6 +6,7 @@ import {
   getDependencyById,
   updateDependency,
   deleteDependency,
+  getDependencyByActiveId,
 } from '@/services/dependenciesService'
 
 import { Dependency } from '@/interfaces/Dependency/dependency.interface'
@@ -20,6 +21,7 @@ interface DependenciesContextData {
     dependencyData: Partial<Dependency>,
   ) => Promise<void>
   deleteDependency: (id: string) => Promise<void>
+  getDependenciesByActiveId: (activeId: string) => Promise<Dependency[]>
 }
 
 interface DependenciesProviderProps {
@@ -86,6 +88,16 @@ export function DependenciesProvider({ children }: DependenciesProviderProps) {
     }
   }
 
+  const getDependenciesByActiveId = async (activeId: string) => {
+    try {
+      const dependencies = await getDependencyByActiveId(activeId)
+      return dependencies
+    } catch (error) {
+      console.error('Error fetching dependencies by Active ID:', error)
+      return []
+    }
+  }
+
   return (
     <DependenciesContext.Provider
       value={{
@@ -95,6 +107,7 @@ export function DependenciesProvider({ children }: DependenciesProviderProps) {
         fetchDependencyById,
         updateDependency: updateDependencyHandler,
         deleteDependency: deleteDependencyHandler,
+        getDependenciesByActiveId,
       }}
     >
       {children}

@@ -13,9 +13,13 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
-import { useActives } from '@/hooks/useActives'
-import { Active } from '@/interfaces/Active/active.interface'
 import { useRouter } from 'next/navigation'
+
+import { DependenciesByActiveId } from '@/components/Dependencies/DependenciesByActiveId'
+
+import { useActives } from '@/hooks/useActives'
+
+import { Active } from '@/interfaces/Active/active.interface'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ActiveDetails({ params }: { params: any }) {
@@ -175,6 +179,8 @@ export default function ActiveDetails({ params }: { params: any }) {
           onChange={(e) => handleChange('lifeTime', e.target.value)}
         />
       </FormControl>
+
+      <DependenciesByActiveId activeId={activeId} />
 
       <HStack mt={4} spacing={4}>
         <Button
